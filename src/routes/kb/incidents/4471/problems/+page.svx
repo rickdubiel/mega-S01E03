@@ -1,0 +1,57 @@
+---
+layout: runbook
+title: '#4471 · the problems inside it'
+owner: Rick Dubiel
+status: open
+reviewed: 2026-10-28
+signature: Rick Dubiel
+---
+
+<script>
+  import ProblemTable from '#lib/kb/ProblemTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+[#4471](/kb/incidents/4471) was merged by subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject))
+and marked known, with one fix queued. Read by what the bodies say, and by the tenant and form each
+report came through, it holds more than one bug. Each problem below has its own ticket now. The
+counts are built from the ticket export when the page renders.
+
+## The problems
+
+<ProblemTable ticket={4471} />
+
+### `parser`: the shared parser reads dates month first
+
+Every tenant on file writes the day first. The shared parser reads every date month first, so
+7 April comes out as 4 July. These reports come in by app, email and booking-v2 forms. This is the
+bug #4471 names, and its queued fix covers this row only.
+
+### `hint`: booking-v3 prints a month-first hint
+
+booking-v3 prints `MM/DD/YYYY` under its date field, then reads the date the tenant's way, day
+first. People type what the hint tells them, and the form flips it. Only form reports from tenants
+on booking-v3 land here. The parser fix does not reach them: the hint, or how the form reads it,
+has to change.
+
+### `one-day`: dates move by one day
+
+These reports do not describe a flipped day and month. The date moves by one day: an invite one day
+off, one meeting on Tuesday in Lisbon and on Monday in Toronto, an invite that arrived before the
+booking was made. A day-first parser cannot do that; time-zone handling can. The desk listed them
+in `desk-notes.json` and footnoted them under `parser`. They are a bug of their own.
+
+<Callout kind="warn">
+Intake tags are not causes. Intake guessed <code>hint</code> from a US browser locale; the cause
+depends on the tenant and its form. The "tagged as" column shows where the two disagree.
+</Callout>
+
+## What this changes at the desk
+
+- Closing #4471 when the parser fix ships would leave the `hint` and `one-day` reports with no
+  ticket. Track each problem on its own ticket.
+- Subject lines did not separate these problems: the same subjects turn up under all three.
+  Decision 0001 stays as accepted; a new decision record should replace it.
+
+<RenderStamp {signature} />
