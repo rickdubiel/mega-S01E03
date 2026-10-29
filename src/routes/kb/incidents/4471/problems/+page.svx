@@ -4,7 +4,7 @@ title: '#4471 · the problems inside it'
 owner: Rick Dubiel
 status: open
 reviewed: 2026-10-28
-signature: Rick Dubiel
+signature: 'v1.eyJzdWIiOiIxNzMwIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMyMzk3MzIsImV4cCI6MTc5MzMyNjEzMn0.PO_137xpNu-9juIuysWcyCmyyeVOunkdskNDO_Yif_w'
 ---
 
 <script>

@@ -6,4 +6,4 @@
 - `kb-incidents-4471-problems.html`: the prerendered page, CSS inlined, no scripts.
 - `kb-incidents-4471-problems.png`: screenshot of the built page (dark theme).
 
-Desk ref for signature `Rick Dubiel`: **DR-ZX8K-GJBN**.
+Signed with the course ticket from start-challenge (owner: Rick Dubiel). Desk ref: **DR-52RN-MKFS**.
