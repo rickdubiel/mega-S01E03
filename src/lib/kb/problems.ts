@@ -7,9 +7,11 @@ import { causeOf, uniqueById, type Report, type Tenant } from '#lib/kb/causes';
 export type Problem = 'parser' | 'hint' | 'one-day';
 export const PROBLEMS: readonly Problem[] = ['parser', 'hint', 'one-day'];
 
-export function problemOf(r: Report, t: Tenant | undefined, oneDayMove: readonly string[]): Problem | 'unplaced' {
-  if (oneDayMove.includes(r.id)) return 'one-day';
-  return causeOf(r, t) ?? 'unplaced';
+// Counted the desk's way (CauseTable): every report under the cause it is filed under by tenant.
+// `one-day` reports stay counted there too and are listed again as a problem of their own.
+export function problemsOf(r: Report, t: Tenant | undefined, oneDayMove: readonly string[]): (Problem | 'unplaced')[] {
+  const filed = causeOf(r, t) ?? 'unplaced';
+  return oneDayMove.includes(r.id) ? [filed, 'one-day'] : [filed];
 }
 
 export type ProblemGroup = {
@@ -32,8 +34,7 @@ export function splitTicket(
   const merged = uniqueById(all).filter((r) => r.mergedInto === ticket);
   const byProblem = new Map<ProblemGroup['problem'], Report[]>();
   for (const r of merged) {
-    const p = problemOf(r, tenantOf(r), oneDayMove);
-    byProblem.set(p, [...(byProblem.get(p) ?? []), r]);
+    for (const p of problemsOf(r, tenantOf(r), oneDayMove)) byProblem.set(p, [...(byProblem.get(p) ?? []), r]);
   }
   const count = (rs: Report[], key: (r: Report) => string) =>
     rs.reduce<Record<string, number>>((n, r) => ({ ...n, [key(r)]: (n[key(r)] ?? 0) + 1 }), {});

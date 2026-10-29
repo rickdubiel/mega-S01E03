@@ -40,7 +40,9 @@ has to change.
 These reports do not describe a flipped day and month. The date moves by one day: an invite one day
 off, one meeting on Tuesday in Lisbon and on Monday in Toronto, an invite that arrived before the
 booking was made. A day-first parser cannot do that; time-zone handling can. The desk listed them
-in `desk-notes.json` and footnoted them under `parser`. They are a bug of their own.
+in `desk-notes.json` and footnoted them under `parser`. They are a bug of their own. The counts
+follow the desk: these reports stay in the `parser` count, where they are filed, and are listed again
+here.
 
 <Callout kind="warn">
 Intake tags are not causes. Intake guessed <code>hint</code> from a US browser locale; the cause

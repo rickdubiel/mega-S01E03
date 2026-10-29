@@ -3,13 +3,14 @@
   import notes from '#lib/data/desk-notes.json';
   import tickets from '#lib/data/tickets-4471.json';
   import { splitTicket } from '#lib/kb/problems';
-  import type { Report } from '#lib/kb/causes';
+  import { uniqueById, type Report } from '#lib/kb/causes';
   import { tenantOf } from '#lib/kb/locales';
 
   let { ticket }: { ticket: number } = $props();
 
   const groups = $derived(splitTicket(reports as Report[], ticket, tenantOf, notes.oneDayMove));
-  const total = $derived(groups.reduce((n, g) => n + g.reports.length, 0));
+  const total = $derived(uniqueById(reports as Report[]).filter((r) => r.mergedInto === ticket).length);
+  const oneDay = $derived(groups.find((g) => g.problem === 'one-day')?.reports.length ?? 0);
   const filed = tickets as Record<string, string | null>;
   const counts = (n: Record<string, number>) =>
     Object.entries(n)
@@ -44,6 +45,11 @@
     {/each}
   </tbody>
 </table>
+
+{#if oneDay}
+  <p class="small">Counted the desk's way: each report under the cause it is filed under by tenant. The {oneDay}
+    <code>one-day</code> reports are filed under <code>parser</code> and listed again in their own row.</p>
+{/if}
 
 <style>
   .sum { font-size: 1.1rem; }
